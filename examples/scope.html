@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div ruddy-app="example01">
+        <div app-controller="ctrl01">
+            <input type="text" value="Gil" app-model="name">
+            <span app-view="html"><b>{{name}}</b>!</span>
+        </div>
+        <div app-controller="ctrl02">
+            <input type="text" value="Gil" app-model="greetings">
+            <input type="text" value="Gil" app-model="name">
+            <span app-view="html"><b>{{greetings}}</b> <b>{{name}}</b>!</span>
+        </div>
+    </div>
+
+    <div ruddy-app="example02">
+        <div app-controller="ctrl01">
+            <input type="text" value="Gil" app-model="name">
+            <span app-view="html"><b>{{name}}</b>!</span>
+        </div>
+        <div app-controller="ctrl02">
+            <input type="text" value="Gil" app-model="name">
+            <span app-view="html"><b>{{name}}</b>!</span>
+        </div>
+    </div>
+
+    <script src="../globals/core.js"></script>
+    <script src="../globals/object.js"></script>
+    <script src="../globals/function.js"></script>
+    <script src="../globals/array.js"></script>
+    <script src="../globals/string.js"></script>
+    <script src="../globals/element.js"></script>
+    <script src="../globals/nodes.js"></script>
+    <script src="../globals/document.js"></script>
+    <script src="../globals/style.js"></script>
+    <script src="../events/input.js"></script>
+    <script src="../ruddy.js"></script>
+    <script src="../ext/ajax.js"></script>
+    <script src="../ext/animation.js"></script>
+    <script src="../templating/config.js"></script>
+    <script src="../templating/cache.js"></script>
+    <script src="../templating/model.js"></script>
+    <script src="../templating/app.js"></script>
+    <script src="../templating/templating.js"></script>
+    <script>
+        var app = Ruddy.app('example01');
+
+        app.controller('ctrl01', function(model){
+            var name = model.name;
+
+            name.value('Maria');
+        });
+    </script>
+</body>
+</html>
