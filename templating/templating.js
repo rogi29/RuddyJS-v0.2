@@ -1,21 +1,6 @@
 (function(__core, $r){
     var cache = $obj (__core.cache.templating);
 
-    $r (document).on('load', function(e){
-        console.log('hello');
-        cache.forEach(function(v){
-            $obj (v.controllers).forEach(function(c) {
-                $obj (c.models).forEach(function(m) {
-                    var modelName = m.name;
-                    console.log(m);
-                    $arr (c.views).forEach(function(v){
-                        console.log(v);
-                    });
-                });
-            });
-        });
-    })
-
     cache.forEach(function(v){
         $obj (v.controllers).forEach(function(c) {
             $obj (c.models).forEach(function(m) {
