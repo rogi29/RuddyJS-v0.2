@@ -49,6 +49,31 @@
         }
     }
 
+    /**
+     * Get Function
+     *
+     * @param event
+     * @returns {Function}
+     */
+    function getFunction(event) {
+        switch(event) {
+            case 'input':
+                return $func (function (target) {
+                    return target.value;
+                });
+                break;
+
+            case 'click':
+                return $func (function (target) {
+                    return target.value;
+                });
+                break;
+
+            default:
+                return  function(){};
+                break;
+        }
+    }
 
     /**
      * Templating cache object
@@ -103,9 +128,10 @@
                     $r (appQuery).find(controllerQuery).find(this.attrs.model).each($func (function(v) {
                         var modelExt    = this.attrs.model.replace('[', ''). replace(']', ''),
                             modelName   = $el (v).getAttribute(modelExt),
-                            el          = $r ($el (v));
+                            el          = $r ($el (v)),
+                            defaultFunc = getFunction(getEvent(v));
 
-                        this.$tree[appName].controllers[controllerName].models[modelName] = $obj ({el: el, event: getEvent(v), name: modelName, value: el.el.value});
+                        this.$tree[appName].controllers[controllerName].models[modelName] = $obj ({el: el, event: getEvent(v), name: modelName, value: el.el.value, func: defaultFunc, defaultFunc: defaultFunc});
                     }).bind(this));
 
                     //Cache all views

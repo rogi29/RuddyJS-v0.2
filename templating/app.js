@@ -9,11 +9,12 @@
 
     app.assign('controller', $func (function(controllerName, func){
         this.controller = this.app.controllers[controllerName];
+        this.models = [];
         this.controller.models.forEach($func (function(v, k){
-            this.controller.models[k] = __core.model(v);
+            this.models[k] = __core.model(v);
         }).bind(this));
 
-        func.call(this.controller, this.controller.models, this.controller.views);
+        func.call(this.controller, this.models, this.controller.views);
     }));
 
     __core.app = app;
