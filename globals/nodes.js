@@ -84,6 +84,7 @@
              * @returns {*}
              */
             first: function () {
+                "use strict";
                 if(nodes.length == 0)
                     throw new TypeError('Cant retrieve first element of an nodeList array with no initial value');
 
@@ -95,6 +96,7 @@
              * @returns {*}
              */
             last: function () {
+                "use strict";
                 if(nodes.length == 0)
                     throw new TypeError('Cant retrieve last element of an empty nodeList with no initial value');
 
@@ -106,10 +108,27 @@
              * @returns {boolean}
              */
             isOne: function() {
+                "use strict";
                 if(nodes.length == 0)
                     throw new TypeError('Cant retrieve last element of an empty nodeList with no initial value');
 
                 return (nodes.length == 1);
+            },
+
+            /**
+             *
+             * @param value
+             * @returns {*}
+             */
+            indexOf: function(value) {
+                "use strict";
+                var a = nodes, key;
+                for (key in a) {
+                    if(value == a[key]) {
+                        return key;
+                    }
+                }
+                return -1;
             }
         };
 

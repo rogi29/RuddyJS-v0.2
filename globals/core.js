@@ -37,9 +37,8 @@
     var
         objectAssign = (Object.assign || function(target) {
             'use strict';
-            if (target == null) {
+            if (target == null)
                 throw new TypeError('Cannot convert undefined or null to object');
-            }
 
             target = Object(target);
             for (var index = 1; index < arguments.length; index++) {
@@ -179,7 +178,7 @@
 
             return typeof v === 'object' &&
             (/^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepr) &&
-            (typeof v.length === 'number') || (isArray(v) && isElement(v[0])));
+            (typeof v.length === 'number') || (isArray(v) && isElement(v[0]))) || v instanceof HTMLAllCollection;
         },
 
         /**

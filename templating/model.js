@@ -9,6 +9,7 @@
 
     model.prototype.value = function(value){
         if(value){
+            this.obj.value = value;
             return this.obj.el.setAttribute('value', value);
         }
 

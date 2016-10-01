@@ -5,16 +5,29 @@
         }
 
         this.app = __core.cache.templating[appName];
+        this.ctrler = [];
+        this.models = [];
+        this.index = 0;
     });
 
     app.assign('controller', $func (function(controllerName, func){
-        this.controller = this.app.controllers[controllerName];
-        this.models = [];
-        this.controller.models.forEach($func (function(v, k){
-            this.models[k] = __core.model(v);
+        var ctrler;
+
+        this.models[this.index] = {};
+        this.ctrler[this.index] = ctrler = this.app.controllers[controllerName];
+        this.ctrler[this.index]['model'] = function(modelName, value) {
+            var func = function(target) {
+                return target.value;
+            }
+            ctrler.models[modelName] = {value: value, defaultFunc: func, func: func};
+        };
+
+        this.ctrler[this.index].models.forEach($func (function(v, k){
+            this.models[this.index][k] = __core.model(v);
         }).bind(this));
 
-        func.call(this.controller, this.models, this.controller.views);
+        func.call(this.ctrler[this.index], this.models[this.index], this.ctrler[this.index].views);
+        this.index++;
     }));
 
     __core.app = app;

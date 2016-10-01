@@ -53,7 +53,7 @@
                 return false;
             },
 
-            addEventListener: Document.prototype.addEventListener || function(eventNameWithoutOn, callback) {
+            addEventListener: document.addEventListener || function(eventNameWithoutOn, callback) {
                 return doc.attachEvent('on' + eventNameWithoutOn, callback);
             }
         };

@@ -3,12 +3,14 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript">window._trackJs = { token: '1a907d4f241f4feaa4cd5df9d9488dd9' };</script>
+    <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
 </head>
 <body>
     <div ruddy-app="example01">
         <div app-controller="ctrl01">
-            <input type="text" value="Gil" app-model="name">
-            <span app-view="html"><b>{{name}}</b>!</span>
+            <input type="text" value="Hello" app-model="name">
+            <span app-view="html"><b>{{name}} {{sentence}}</b>!</span>
         </div>
         <div app-controller="ctrl02">
             <input type="text" value="Gil" app-model="greetings">
@@ -48,13 +50,31 @@
     <script src="../templating/templating.js"></script>
     <script>
         var app = Ruddy.app('example01');
+        var app2 = Ruddy.app('example02');
 
         app.controller('ctrl01', function(models){
-            var name = models.name;
+            var name = models.name,
+                sentence = new this.model('sentence', 'For Ever!');
+
             name.value('Maria');
             name.func(function(target) {
-                return 'I Love ' + target.value + '! <3';
+                return 'I Love ' + target.value + ' <3';
             });
+        });
+
+        app.controller('ctrl02', function(models){
+            var greetings = models.greetings;
+            greetings.value('Hello');
+        });
+
+        app2.controller('ctrl01', function(models){
+            var name = models.name;
+            name.value('Jon');
+        });
+
+        app2.controller('ctrl02', function(models){
+            var name = models.name;
+            name.value('Nick');
         });
 
         Ruddy.templating();

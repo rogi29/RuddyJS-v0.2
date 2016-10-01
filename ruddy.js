@@ -47,7 +47,7 @@
         var index = param;
         if(__core.isEl(param)) {
             this.el = $el (param);
-            this.index = index = Array.prototype.slice.call(doc.all).indexOf(param);
+            this.index = index = $nodes (doc.all).indexOf(param);
         }
 
         if($$rCache[index]) {
@@ -68,7 +68,7 @@
 
             this.el     =  el;
             this.param  = param;
-            this.index  = this.index || Array.prototype.slice.call(doc.all).indexOf(el);
+            this.index  = this.index || $nodes (doc.all).indexOf(param);
 
             $$rCache[index] = {el: this.el, param: this.param, index: this.index}
         }
@@ -87,9 +87,9 @@
             return $r(key);
         }
 
-        var el = $nodes (this.el.querySelectorAll(selectors));
+        var el = $nodes ($el (this.el).querySelectorAll(selectors));
         el = (el.length == 1) ? $el (el.first()) : el;
-        $$rCache[key] = {el: el, param: key, index: Array.prototype.slice.call(doc.all).indexOf(el), rule: null};
+        $$rCache[key] = {el: el, param: key, index: $nodes (doc.all).indexOf(el), rule: null};
 
         return $r(key);
     }));
