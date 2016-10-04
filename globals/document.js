@@ -11,20 +11,20 @@
 
 (function(__core){
     var docum = function(doc) {
-        if(!__core.isDoc(doc))
+        if(__core.isDoc(doc) === false)
             throw new TypeError("$doc type - argument provided is not a function type");
 
         var prototype = {
-            querySelectorAll: (document.querySelectorAll ||  function (r, c, i, j, a) {
+            querySelectorAll: (document.querySelectorAll || function (r, c, i, j, a) {
                 var d=document,
                     s=d.createStyleSheet();
                 a = d.all;
                 c = [];
                 r = r.replace(/\[for\b/gi, '[htmlFor').split(',');
                 for (i = r.length; i--;) {
-                    s.addRule(r[i], 'k:v');
+                    s.addRule(r[i], 'visiblility:visible', 0);
                     for (j = a.length; j--;) {
-                        a[j].currentStyle.k && c.push(a[j]);
+                        a[j].currentStyle.visiblility && c.push(a[j]);
                     }
                     s.removeRule(0);
                 }
@@ -32,7 +32,7 @@
             }),
 
             querySelector: (document.querySelector || function(selectors) {
-                var elements = document.querySelectorAll(selectors);
+                var elements = prototype.querySelectorAll.call(document, selectors);
                 return (elements.length) ? elements[0] : null;
             }),
 

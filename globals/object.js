@@ -11,7 +11,7 @@
 
 (function(__core){
     var object = function(obj) {
-        if(!__core.isObj(obj))
+        if(__core.isObj(obj) === false)
             throw new TypeError("$obj type - argument provided is not an Object type");
 
         var prototype = {

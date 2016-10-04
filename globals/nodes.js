@@ -11,7 +11,7 @@
 
 (function(__core){
     var nodeList = function(nodes) {
-        if(!__core.isNodes(nodes))
+        if(__core.isNodes(nodes) === false)
             throw new TypeError("$nods type - argument provided is not a nodeList type");
 
         var prototype = {
@@ -137,3 +137,4 @@
 
     window.$nodes = nodeList;
 })(Ruddy);
+

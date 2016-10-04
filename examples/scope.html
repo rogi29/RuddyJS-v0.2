@@ -3,8 +3,6 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <script type="text/javascript">window._trackJs = { token: '1a907d4f241f4feaa4cd5df9d9488dd9' };</script>
-    <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
 </head>
 <body>
     <div ruddy-app="example01">
@@ -35,9 +33,9 @@
     <script src="../globals/function.js"></script>
     <script src="../globals/array.js"></script>
     <script src="../globals/string.js"></script>
-    <script src="../globals/element.js"></script>
-    <script src="../globals/nodes.js"></script>
     <script src="../globals/document.js"></script>
+    <script src="../globals/nodes.js"></script>
+    <script src="../globals/element.js"></script>
     <script src="../globals/style.js"></script>
     <script src="../events/input.js"></script>
     <script src="../ruddy.js"></script>
@@ -49,15 +47,15 @@
     <script src="../templating/app.js"></script>
     <script src="../templating/templating.js"></script>
     <script>
-        var app = Ruddy.app('example01');
-        var app2 = Ruddy.app('example02');
+        var app = new Ruddy.app('example01');
+        var app2 = new Ruddy.app('example02');
 
-        app.controller('ctrl01', function(models){
+        app.controller('ctrl01', function(models) {
             var name = models.name,
                 sentence = new this.model('sentence', 'For Ever!');
 
             name.value('Maria');
-            name.func(function(target) {
+            name.callback(function(target) {
                 return 'I Love ' + target.value + ' <3';
             });
         });

@@ -1,32 +1,30 @@
 (function(__core, $r){
-    var app = $obj (function(appName){
-        if (!(this instanceof app)) {
-            return new app(appName);
-        }
+    var app = $obj (function(appName) {
 
         this.app = __core.cache.templating[appName];
-        this.ctrler = [];
+        this.ctrl = [];
         this.models = [];
         this.index = 0;
     });
 
     app.assign('controller', $func (function(controllerName, func){
-        var ctrler;
+        var ctrl;
 
         this.models[this.index] = {};
-        this.ctrler[this.index] = ctrler = this.app.controllers[controllerName];
-        this.ctrler[this.index]['model'] = function(modelName, value) {
+        this.ctrl[this.index] = ctrl = this.app.controllers[controllerName];
+        this.ctrl[this.index]['model'] = $func (function(modelName, value) {
             var func = function(target) {
                 return target.value;
             }
-            ctrler.models[modelName] = {value: value, defaultFunc: func, func: func};
-        };
+            ctrl.models[modelName] = {value: value, defaultFunc: func, func: func};
+            return __core.model(ctrl.models[modelName]);
+        }).bind(this);
 
-        this.ctrler[this.index].models.forEach($func (function(v, k){
+        this.ctrl[this.index].models.forEach($func (function(v, k){
             this.models[this.index][k] = __core.model(v);
         }).bind(this));
 
-        func.call(this.ctrler[this.index], this.models[this.index], this.ctrler[this.index].views);
+        func.call(this.ctrl[this.index], this.models[this.index], this.ctrl[this.index].views);
         this.index++;
     }));
 

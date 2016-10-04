@@ -11,7 +11,7 @@
 
 (function(__core){
     var string = function(str) {
-        if(!__core.isStr(str))
+        if(__core.isStr(str) === false)
             throw new TypeError("$str type - argument provided is not a function type");
 
         var prototype = {

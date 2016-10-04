@@ -4,18 +4,9 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body ruddy-app="example">
-<div id="name" app-controller="Greetings">
-    <input type="text" value="Hello" app-model="greetings">
-    <input type="text" value="Gil" app-model="name">
-    <span app-view>* {{greetings}}, <b>{{name}}</b>!</span>
-</div>
+<body>
 
-<div app-controller="check">
-    <input type="checkbox" checked app-model="remember">
-    <input type="checkbox" app-model="store">
-    <span app-view>*Remember: <b>{{remember}}</b>, *Store: <b>{{store}}</b></span>
-</div>
+<div></div>
 
 <script src="../globals/core.js"></script>
 <script src="../globals/object.js"></script>
@@ -31,15 +22,17 @@
 <script src="../ext/ajax.js"></script>
 <script src="../ext/animation.js"></script>
 <script src="../ext/scroll.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
 <script>
     $r({url: 'http://www.json-generator.com/api/json/get/cpzpGwSxaq?indent=2'}).ajax({
-        async: true,
-        success: function () {
-            var obj = JSON.parse(this.response);
+        method: 'POST',
+        async: false,
+        success: function (req) {
+            var obj = JSON.parse(req.response || req.responseText || '{}');
             document.body.innerHTML = JSON.stringify(obj, null, 3);
         },
-        error: function () {
-            console.log('error');
+        error: function (req) {
+            document.body.innerHTML = 'error';
         }
     });
 </script>

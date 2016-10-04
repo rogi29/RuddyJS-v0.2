@@ -13,7 +13,7 @@
             regex       = new RegExp('\/\{' + rand  + '}\/');
 
         html = html.replace(/,/g, '/{'+ rand +'}/').replace(/{{/g, ',{{').replace(/}}/g, '}},');
-        html.split(',').map(function(v, i){
+        $arr (html.split(',')).map(function(v, i){
             v = $str ($str (v).replace(regex, ','));
             if(v.pregMatch(/{{/))
                 braces[i] = v;
@@ -128,7 +128,7 @@
                     $r (appQuery).find(controllerQuery).find(this.attrs.model).each($func (function(v) {
                         var modelExt    = this.attrs.model.replace('[', ''). replace(']', ''),
                             modelName   = $el (v).getAttribute(modelExt),
-                            el          = $r ($el (v)),
+                            el          = $r (v),
                             defaultFunc = getFunction(getEvent(v));
 
                         this.$tree[appName].controllers[controllerName].models[modelName] = $obj ({el: el, event: getEvent(v), name: modelName, value: el.el.value, func: defaultFunc, defaultFunc: defaultFunc});
@@ -138,7 +138,7 @@
                     $r (appQuery).find(controllerQuery).find(this.attrs.view).each($func (function(v, g) {
                         var viewExt = this.attrs.view.replace('[', ''). replace(']', ''),
                             viewName    = $el (v).getAttribute(viewExt),
-                            el          = $r ($el (v)),
+                            el          = $r (v),
                             html        = getDataBinding(el);
 
                         this.$tree[appName].controllers[controllerName].views[g] = $obj ({el: el, name: viewName, htmlData: html.data, htmlBraces: html.braces});

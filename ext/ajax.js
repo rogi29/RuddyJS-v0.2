@@ -82,9 +82,9 @@
         request.setRequestHeader('Content-Type', contentType);
         request.onreadystatechange = function() {
             if (request.readyState == 4 && request.status === 200) {
-                success.apply(request);
-            } else if (request.status !== 200) {
-                error.apply(request);
+                success(request);
+            } else {
+                error(request);
             }
         };
 

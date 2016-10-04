@@ -11,7 +11,7 @@
 
 (function(__core){
     var funct = function(func) {
-        if(!__core.isFunc(func))
+        if(__core.isFunc(func) === false)
             throw new TypeError("$func type - argument provided is not a function type");
 
         var prototype = {

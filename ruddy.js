@@ -41,34 +41,33 @@
      */
     var $r = $obj (function(param) {
         if (!(this instanceof $r)) {
-            return new $r(param);
+            return new $r (param);
         }
 
-        var index = param;
-        if(__core.isEl(param)) {
-            this.el = $el (param);
-            this.index = index = $nodes (doc.all).indexOf(param);
+        var index = param, el;
+        if (__core.isEl(index)) {
+            index = $nodes (doc.all).indexOf(param);
         }
 
         if($$rCache[index]) {
             var cache = $$rCache[index];
 
-            this.el     = cache.el;
-            this.param  = cache.param;
-            this.index  = cache.index;
+            this.el = cache.el;
+            this.param = cache.param;
+            this.index = cache.index;
         } else {
-            var el = this.el || false;
-
-            if(__core.isStr(param)) {
+            if (__core.isEl(param)) {
+                el = $el (param);
+            } else if (__core.isStr(param)) {
                 el = $nodes (doc.querySelectorAll(param));
-                el = (el.length == 1) ? $el (el.first()) : el;
-            } else if(__core.isArr(param) || __core.isNodes(param)) {
+                el = (el.length == 1) ? $el(el.first()) : el;
+            } else if (__core.isArr(param) || __core.isNodes(param)) {
                 el = param;
             }
 
-            this.el     =  el;
-            this.param  = param;
-            this.index  = this.index || $nodes (doc.all).indexOf(param);
+            this.el = el;
+            this.param = param;
+            this.index = index;
 
             $$rCache[index] = {el: this.el, param: this.param, index: this.index}
         }
@@ -81,17 +80,18 @@
      * @returns {$r}
      */
     $r.assign('find', $func (function(selectors) {
-        var key = this.param + ':' + selectors;
+        var key = this.param + ':' + selectors, el = this.el;
 
         if($$rCache[key]) {
             return $r(key);
         }
 
-        var el = $nodes ($el (this.el).querySelectorAll(selectors));
+        el = $nodes ($el(el).querySelectorAll(selectors));
         el = (el.length == 1) ? $el (el.first()) : el;
+
         $$rCache[key] = {el: el, param: key, index: $nodes (doc.all).indexOf(el), rule: null};
 
-        return $r(key);
+        return $r (key);
     }));
 
     /**
@@ -122,7 +122,7 @@
      */
     $r.assign('html', $func (function(content) {
         var el = this.el;
-        if(typeof content == 'undefined')
+        if(!content)
             return el.innerHTML;
 
         return {
@@ -142,18 +142,29 @@
         }
     }));
 
+    /**
+     * Get Attribute
+     *
+     * @param name
+     * @returns {*|string}
+     */
     $r.assign('getAttribute', $func (function(name) {
-        if(!__core.isEl(this.el)) {
+        if(__core.isEl(this.el) === false)
             throw new TypeError("$r argument provided is not an element");
-        }
 
         return this.el.getAttribute(name);
     }));
 
+    /**
+     * Set Attribute
+     *
+     * @param name
+     * @param value
+     * @returns {*}
+     */
     $r.assign('setAttribute', $func (function(name, value) {
-        if(!__core.isEl(this.el)) {
+        if(__core.isEl(this.el) === false)
             throw new TypeError("$r argument provided is not an element");
-        }
 
         return this.el.setAttribute(name, value);
     }));
@@ -163,7 +174,7 @@
      *
      * @returns {Function|null|*}
      */
-    $r.assign('createRule', $func (function() {
+    $r.assign('createRule', $func (function(css) {
         var index = css.insertRule(this.param + '{}', css.cssRules.length);
         $$rCache[this.param].rule = this.rule = css.getRule(index);
         return index;
@@ -316,7 +327,7 @@
     /**
      * $r in window
      *
-     * @type {{find: *, each: *, html: *, createRule: *, css: *, style: *, when: *, then: *, or: *, on: *, position: *, size: *}}
+     * @type {{find: *, each: *, html: *, getAttribute: *, setAttribute: *, createRule: *, css: *, style: *, when: *, then: *, or: *, on: *, position: *, size: *}}
      */
     window.$r = $r;
 })(Ruddy);

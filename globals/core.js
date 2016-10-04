@@ -35,10 +35,11 @@
      * @returns {*}
      */
     var
-        objectAssign = (Object.assign || function(target) {
+        objectAssign = Object.prototype.assign || (function(target) {
             'use strict';
-            if (target == null)
-                throw new TypeError('Cannot convert undefined or null to object');
+
+            if (target === null)
+                throw new TypeError('Cannot convert null or undefined to an object');
 
             target = Object(target);
             for (var index = 1; index < arguments.length; index++) {
@@ -104,7 +105,7 @@
          * @returns {boolean}
          */
         isElement = function(v) {
-            return (v.nodeName || v.tagName || v.className || v.id) ? true : false;
+            return (v && (v.nodeName || v.tagName || v.className || v.id)) ? true : false;
         },
 
         /**
@@ -178,7 +179,7 @@
 
             return typeof v === 'object' &&
             (/^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepr) &&
-            (typeof v.length === 'number') || (isArray(v) && isElement(v[0]))) || v instanceof HTMLAllCollection;
+            (typeof v.length === 'number') || (v[0] && isElement(v[0]))) || (window.HTMLAllCollection && v instanceof HTMLAllCollection);
         },
 
         /**

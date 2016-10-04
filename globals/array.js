@@ -11,7 +11,7 @@
 
 (function(__core){
     var array = function(arr) {
-        if(!__core.isArr(arr))
+        if(__core.isArr(arr) === false)
             throw new TypeError("$arr type - argument provided is not a function type");
 
         var prototype = {
@@ -156,6 +156,30 @@
                     throw new TypeError('Cant retrieve last element of an empty array with no initial value');
 
                 return arr[arr.length - 1];
+            },
+
+            /**
+             *
+             * @param elt
+             * @returns {number}
+             */
+            indexOf: Array.prototype.indexOf || function(elt /*, from*/) {
+                var len = this.length >>> 0;
+
+                var from = Number(arguments[1]) || 0;
+                from = (from < 0)
+                    ? Math.ceil(from)
+                    : Math.floor(from);
+                if (from < 0)
+                    from += len;
+
+                for (; from < len; from++)
+                {
+                    if (from in this &&
+                        this[from] === elt)
+                        return from;
+                }
+                return -1;
             }
         };
 

@@ -11,26 +11,23 @@
 
 (function(__core){
     var element = function(el) {
-        if(!__core.isEl(el))
+       if(__core.isEl(el) === false)
             throw new TypeError("$el type - argument provided is not a function type");
 
         var prototype = {
-            querySelectorAll: ('Element' in window) ? Element.prototype.querySelectorAll : function (r, c, i, j, a)
-            {
-                var d=document,
-                    s=d.createStyleSheet();
-                a = d.all;
-                c = [];
-                r = r.replace(/\[for\b/gi, '[htmlFor').split(',');
-                for (i = r.length; i--;) {
-                    s.addRule(r[i], 'k:v');
-                    for (j = a.length; j--;) {
-                        a[j].currentStyle.k && c.push(a[j]);
+
+            querySelectorAll: ('Element' in window) ? Element.prototype.querySelectorAll :
+            (function(selector) {
+                var nodes = el.childNodes, list = [], i, l = 0;
+                for(i = 0; i < nodes.length; i++) {
+                    if ($nodes ($doc (document).querySelectorAll(selector)).indexOf(nodes[i]) !== -1) {
+                        list[l] = nodes[i];
+                        l++;
                     }
-                    s.removeRule(0);
                 }
-                return c;
-            },
+
+                return list;
+            }),
 
             querySelector: ('Element' in window) ? Element.prototype.querySelector : function(selectors)
             {
