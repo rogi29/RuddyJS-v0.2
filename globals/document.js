@@ -55,6 +55,33 @@
 
             addEventListener: document.addEventListener || function(eventNameWithoutOn, callback) {
                 return doc.attachEvent('on' + eventNameWithoutOn, callback);
+            },
+
+            dispatchEvent: ('Element' in window) ? Element.prototype.dispatchEvent : function (eventObject) {
+                return doc.fireEvent("on" + eventObject.type, eventObject);
+            },
+
+            customEvent: function(event, params) {
+                if(typeof window.CustomEvent === 'function')
+                    return new CustomEvent(event, params);
+
+                function CustomEvent ( event, params ) {
+                    params = params || { bubbles: false, cancelable: false, detail: undefined };
+                    var e = document.createEvent( 'CustomEvent' );
+                    e.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+                    return e;
+                }
+
+                window.CustomEvent = CustomEvent;
+                return new CustomEvent(event, params );
+            },
+
+            mousePosition: function(e) {
+                var x, y;
+                x =  e.pageX || (e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft) || ((e.changedTouches) ? e.changedTouches[0].pageX : 0);
+                y =  e.pageY || (e.clientY + document.body.scrollTop + document.documentElement.scrollTop) || ((e.changedTouches) ? e.changedTouches[0].pageY : 0);
+
+                return {x: Math.round(x), y: Math.round(y)}
             }
         };
 

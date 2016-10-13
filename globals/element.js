@@ -15,7 +15,6 @@
             throw new TypeError("$el type - argument provided is not a function type");
 
         var prototype = {
-
             querySelectorAll: ('Element' in window) ? Element.prototype.querySelectorAll :
             (function(selector) {
                 var nodes = el.childNodes, list = [], i, l = 0;
@@ -40,8 +39,11 @@
                 return el.attachEvent('on' + eventNameWithoutOn, callback);
             },
 
-            //('Element' in window && 'getAttribute' in Element.prototype) ? Element.prototype.getAttribute :
-            getAttribute: ('Element' in window && 'getAttribute' in Element.prototype) ? Element.prototype.getAttribute : function(attributeName) {
+            dispatchEvent: ('Element' in window) ? Element.prototype.dispatchEvent : function (eventObject) {
+                return el.fireEvent("on" + eventObject.type, eventObject);
+            },
+
+            getAttribute: ('Element' in window) ? Element.prototype.getAttribute : function(attributeName) {
                 var attrs = el.attributes, i;
 
                 for(i = attrs.length; i--;){
@@ -49,10 +51,9 @@
                         return attrs[i].value;
                     }
                 }
-            }/*,
+            },
 
-            ('Element' in window && 'setAttribute' in Element.prototype) ? Element.prototype.setAttribute :
-            setAttribute: function(name, value) {
+            setAttribute: ('Element' in window) ? Element.prototype.setAttribute : function(name, value) {
                 var attrs = el.attributes, i;
 
                 for(i = attrs.length; i--;){
@@ -65,7 +66,7 @@
 
                 attrs[attrs.length] = {};
                 attrs[attrs.length][name] = {}
-            }*/
+            }
         };
 
         return __core.assign(el, prototype);

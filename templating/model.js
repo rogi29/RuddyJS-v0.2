@@ -20,7 +20,7 @@
     model.prototype.value = function(value){
         if(value) {
             if(this.obj.el)
-                this.obj.el.setAttribute('value', value);
+                this.obj.el.attribute('value', value);
 
             return this.obj.value = value;
         }

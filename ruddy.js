@@ -122,7 +122,7 @@
      */
     $r.assign('html', $func (function(content) {
         var el = this.el;
-        if(!content)
+        if(typeof content === 'undefined')
             return el.innerHTML;
 
         return {
@@ -143,28 +143,17 @@
     }));
 
     /**
-     * Get Attribute
+     * Get/Set Attribute
      *
      * @param name
      * @returns {*|string}
      */
-    $r.assign('getAttribute', $func (function(name) {
+    $r.assign('attribute', $func (function(name, value) {
         if(__core.isEl(this.el) === false)
             throw new TypeError("$r argument provided is not an element");
 
-        return this.el.getAttribute(name);
-    }));
-
-    /**
-     * Set Attribute
-     *
-     * @param name
-     * @param value
-     * @returns {*}
-     */
-    $r.assign('setAttribute', $func (function(name, value) {
-        if(__core.isEl(this.el) === false)
-            throw new TypeError("$r argument provided is not an element");
+        if(!value)
+            return this.el.getAttribute(name);
 
         return this.el.setAttribute(name, value);
     }));
@@ -188,7 +177,7 @@
      * @returns {*}
      */
     $r.assign('css', $func (function(rule, value) {
-        var css = this.rule;
+        var css = this.rule, rule = rule+'';
 
         if(!value)
             return css.style[rule];
@@ -204,7 +193,7 @@
      * @returns {*}
      */
     $r.assign('style', $func (function(rule, value) {
-        var el = this.el;
+        var el = this.el, rule = rule+'';
 
         if(!value)
             return el.style[rule];
@@ -270,11 +259,11 @@
      * @param listener
      * @returns {boolean}
      */
-    $r.assign('on', $func (function(listener, callback) {
+    $r.assign('on', $func (function(listener, callback, settings) {
         var obj = this.el, target, calls = 0;
 
         if(listener in __core.events){
-            obj.calls = __core.events[listener].call(this, obj, callback);
+            obj.calls = __core.events[listener].call(this, obj, callback, settings);
             return;
         }
 
@@ -285,8 +274,6 @@
             calls++;
             callback.call(this, e, target, obj, calls);
         }, false);
-
-       // return false;
     }));
 
     /**
@@ -318,16 +305,50 @@
      * @returns {{width: (Number|number), height: (Number|number)}}
      */
     $r.assign('size', $func (function() {
-        var width = parseInt(this.css('width')) || this.el.offsetWidth || 0,
-            height = parseInt(this.css('height')) || this.el.offsetHeight || 0;
+        var width = parseInt(this.style('width')) || this.el.offsetWidth || 0,
+            height = parseInt(this.style('height')) || this.el.offsetHeight || 0;
 
         return {width: width, height: height};
     }));
 
     /**
+     * Get Translate Values
+     *
+     * @returns {*}
+     */
+    $r.assign('getTranslate', $func (function() {
+        var values = (this.style('transform')) ? this.style('transform').match(/translate\((.*)\)/): null;
+
+        if(values != null) {
+            values = (values[1]).trim();
+            values = values.split(",");
+
+            return {x: parseInt(values[0]), y: parseInt(values[1])};
+        }
+
+        return {x: parseInt(this.style('left')) || 0, y: parseInt(this.style('top')) || 0};
+    }));
+
+    /**
+     * Set Translate Values
+     *
+     * @returns {*}
+     */
+    $r.assign('setTranslate', $func (function(x, y) {
+        if('transform' in document.body.style) {
+            this.style('transform', 'translate(' + x + 'px, ' + y + 'px)')
+            return this;
+        }
+
+        this.style('top', y + 'px');
+        this.style('left', x + 'px');
+        return this;
+    }));
+
+    /**
      * $r in window
      *
-     * @type {{find: *, each: *, html: *, getAttribute: *, setAttribute: *, createRule: *, css: *, style: *, when: *, then: *, or: *, on: *, position: *, size: *}}
+     * @type {{find: *, each: *, html: *, attribute: *, createRule: *, css: *, style: *, when: *, then: *, or: *, on: *, position: *, size: *, getTranslate: *, setTranslate: *}}
      */
     window.$r = $r;
 })(Ruddy);

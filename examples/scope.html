@@ -37,8 +37,11 @@
     <script src="../globals/nodes.js"></script>
     <script src="../globals/element.js"></script>
     <script src="../globals/style.js"></script>
-    <script src="../events/input.js"></script>
     <script src="../ruddy.js"></script>
+    <script src="../events/input.js"></script>
+    <script src="../events/draggable.js"></script>
+    <script src="../events/grabbable.js"></script>
+    <script src="../events/droppable.js"></script>
     <script src="../ext/ajax.js"></script>
     <script src="../ext/animation.js"></script>
     <script src="../templating/config.js"></script>
@@ -51,8 +54,21 @@
         var app2 = new Ruddy.app('example02');
 
         app.controller('ctrl01', function(models) {
-            var name = models.name,
+            var name = models.name, el = name.element(),
                 sentence = new this.model('sentence', 'For Ever!');
+
+            el.on('draggable', function(e, t) {
+                console.log('grab.start');
+            }, {axis: 'y', enableTouch: true});
+
+            el.on('drag.move', function(e, t) {
+                console.log('grab.move');
+            });
+
+            el.on('drag.end', function(e, t, el, calls) {
+                console.log('grab.end');
+            });
+
 
             name.value('Maria');
             name.callback(function(target) {
@@ -61,8 +77,12 @@
         });
 
         app.controller('ctrl02', function(models){
-            var greetings = models.greetings;
+            var greetings = models.greetings, el = greetings.element();
+
             greetings.value('Hello');
+            el.on('droppable', function(e, t) {
+                console.log('drop');
+            }, {sync: true});
         });
 
         app2.controller('ctrl01', function(models){
