@@ -6,15 +6,15 @@
      * @returns {{data: *, braces: *}}
      */
     function getDataBinding(el) {
-        var html        = $str (el.html()),
-            data        = $arr ([]),
-            braces      = $arr ([]),
+        var html        = el.html(),
+            data        = [],
+            braces      = [],
             rand        = Math.random(),
             regex       = new RegExp('\/\{' + rand  + '}\/');
 
         html = html.replace(/,/g, '/{'+ rand +'}/').replace(/{{/g, ',{{').replace(/}}/g, '}},');
         $arr (html.split(',')).map(function(v, i){
-            v = $str ($str (v).replace(regex, ','));
+            v = $str (v.replace(regex, ','));
             if(v.pregMatch(/{{/))
                 braces[i] = v;
 
@@ -78,84 +78,60 @@
     /**
      * Templating cache object
      *
-     * @type {{cacheAll:*}}
+     * @returns {*}
      */
-    var cache = $obj (
-        function(attrs) {
-            this.attrs = attrs;
-            this.$apps = $r (attrs.app);
-            this.$tree = {};
-            this.$controllers = {};
-        }
-    );
+    function $$cache(attrs) {
+        var apps    = $r (attrs.app),
+            tree    = {};
 
-    cache.assign('cacheAll', $func (function() {
-        this.$apps.each($func (
-            function(v)
-            {
+        apps.each(function(v) {
+            var
+                appExt      = attrs.app.replace('[', ''). replace(']', ''),
+                ctrlrExt    = attrs.controller.replace('[', ''). replace(']', ''),
+                modelExt    = attrs.model.replace('[', ''). replace(']', ''),
+                viewExt     = attrs.view.replace('[', ''). replace(']', ''),
+                appName     = v.getAttribute(appExt),
+                appEl       = $r (attrs.app.slice(0, -1) + '="' + appName + '"]');
+
+            //Cache all controllers
+            tree[appName] = {controllers: {}};
+            appEl.find(attrs.controller).each(function(v){
                 var
-                    /**
-                     *
-                     * @type {string}
-                     */
-                    appExt      = this.attrs.app.replace('[', ''). replace(']', ''),
-                    /**
-                     *
-                     * @type {*|string}
-                     */
-                    appName     = v.getAttribute(appExt),
-                    /**
-                     *
-                     * @type {string}
-                     */
-                    appQuery    = this.attrs.app.slice(0, -1) + '="' + appName + '"]';
+                    controllerName  = $el (v).getAttribute(ctrlrExt),
+                    controllerQuery = attrs.controller.slice(0, -1) + '="' + controllerName + '"]',
+                    controllerEl    = appEl.find(controllerQuery);
 
-                /**
-                 *
-                 * @type {{controllers: {}}}
-                 */
-                this.$tree[appName] = {controllers: $obj ({})};
+                tree[appName].controllers[controllerName] = {el: controllerEl, models: {}, views: []};
 
-                //Cache all controllers
-                $r (appQuery).find(this.attrs.controller).each($func (function(v){
-                    var controllerExt   = this.attrs.controller.replace('[', ''). replace(']', ''),
-                        controllerName  = $el (v).getAttribute(controllerExt),
-                        controllerQuery = this.attrs.controller.slice(0, -1) + '="' + controllerName + '"]';
+                //Cache all models
+                controllerEl.find(attrs.model).each(function(v) {
+                    var
+                        modelName   = $el (v).getAttribute(modelExt),
+                        el          = $r (v),
+                        event       = getEvent(v),
+                        defaultFunc = getFunction(event);
 
-                    this.$tree[appName].controllers[controllerName] = $obj ({el: $r (appQuery).find(controllerQuery), models: $obj ({}), views: []});
+                    tree[appName].controllers[controllerName].models[modelName] = {name: modelName, el: el, value: el.el.value, event: event, func: defaultFunc, defaultFunc: defaultFunc};
+                });
 
-                    //Cache all models
-                    $r (appQuery).find(controllerQuery).find(this.attrs.model).each($func (function(v) {
-                        var modelExt    = this.attrs.model.replace('[', ''). replace(']', ''),
-                            modelName   = $el (v).getAttribute(modelExt),
-                            el          = $r (v),
-                            defaultFunc = getFunction(getEvent(v));
+                //Cache all views
+                controllerEl.find(attrs.view).each(function(v, g) {
+                    var
+                        viewName    = $el (v).getAttribute(viewExt),
+                        el          = $r (v),
+                        html        = getDataBinding(el);
 
-                        this.$tree[appName].controllers[controllerName].models[modelName] = $obj ({el: el, event: getEvent(v), name: modelName, value: el.el.value, func: defaultFunc, defaultFunc: defaultFunc});
-                    }).bind(this));
+                    tree[appName].controllers[controllerName].views[g] = {type: viewName, el: el, htmlData: html.data, htmlBraces: html.braces};
+                });
+            })
+        });
 
-                    //Cache all views
-                    $r (appQuery).find(controllerQuery).find(this.attrs.view).each($func (function(v, g) {
-                        var viewExt = this.attrs.view.replace('[', ''). replace(']', ''),
-                            viewName    = $el (v).getAttribute(viewExt),
-                            el          = $r (v),
-                            html        = getDataBinding(el);
-
-                        this.$tree[appName].controllers[controllerName].views[g] = $obj ({el: el, name: viewName, htmlData: html.data, htmlBraces: html.braces});
-                    }).bind(this));
-                }).bind(this));
-            }
-        ).bind(this));
-
-        return this;
-    }));
+        return $obj (tree);
+    };
 
     /**
      *
      * @type {cache}
      */
-    var $$cache = new cache(__core.config.templating['attributes']);
-    $$cache.cacheAll();
-    Ruddy.cache['templating'] = $$cache.$tree;
-    Ruddy['controllers'] = $$cache.$controllers;
+    Ruddy.cache['templating'] = $$cache(__core.config.templating['attributes']);
 })(Ruddy, $r);

@@ -61,8 +61,9 @@
             } else if (__core.isStr(param)) {
                 el = $nodes (doc.querySelectorAll(param));
                 el = (el.length == 1) ? $el(el.first()) : el;
-            } else if (__core.isArr(param) || __core.isNodes(param)) {
-                el = param;
+            } else {
+                el      = param;
+                index   = JSON.stringify(param) || param;
             }
 
             this.el = el;

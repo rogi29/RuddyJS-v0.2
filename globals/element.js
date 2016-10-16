@@ -51,6 +51,8 @@
                         return attrs[i].value;
                     }
                 }
+
+                return null;
             },
 
             setAttribute: ('Element' in window) ? Element.prototype.setAttribute : function(name, value) {
@@ -62,7 +64,6 @@
                         return;
                     }
                 }
-                console.log(attrs[0]);
 
                 attrs[attrs.length] = {};
                 attrs[attrs.length][name] = {}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body>
+<body style="display: none;">
     <div ruddy-app="example01">
         <div app-controller="ctrl01">
             <input type="text" value="Hello" app-model="name">
@@ -19,15 +19,16 @@
 
     <div ruddy-app="example02">
         <div app-controller="ctrl01">
-            <input type="text" value="Gil" app-model="name">
-            <span app-view="html"><b>{{name}}</b>!</span>
-        </div>
-        <div app-controller="ctrl02">
-            <input type="text" value="Gil" app-model="name">
-            <span app-view="html"><b>{{name}}</b>!</span>
+            <input type="text" value="Greetings" app-model="greetings">
+            <span app-view="html" app-repeat="names"><br><b>{{names}}</b>!</span>
+            <span app-view="html" app-repeat="players->player">
+                <br><br>
+                <b>Name:</b> {{player.name}},
+                <br>
+                <b>Age:</b> {{player.age}}
+            </span>
         </div>
     </div>
-
     <script src="../globals/core.js"></script>
     <script src="../globals/object.js"></script>
     <script src="../globals/function.js"></script>
@@ -53,49 +54,44 @@
         var app = new Ruddy.app('example01');
         var app2 = new Ruddy.app('example02');
 
-        app.controller('ctrl01', function(models) {
+        app.controller('ctrl01', function (models) {
             var name = models.name, el = name.element(),
-                sentence = new this.model('sentence', 'For Ever!');
+                    sentence = new this.model('sentence', 'For Ever!');
 
-            el.on('draggable', function(e, t) {
+            el.on('draggable', function (e, t) {
                 console.log('grab.start');
             }, {axis: 'y', enableTouch: true});
 
-            el.on('drag.move', function(e, t) {
+            el.on('drag.move', function (e, t) {
                 console.log('grab.move');
             });
 
-            el.on('drag.end', function(e, t, el, calls) {
+            el.on('drag.end', function (e, t, el, calls) {
                 console.log('grab.end');
             });
 
-
             name.value('Maria');
-            name.callback(function(target) {
+            name.callback(function (target) {
                 return 'I Love ' + target.value + ' <3';
             });
         });
 
-        app.controller('ctrl02', function(models){
+        app.controller('ctrl02', function (models) {
             var greetings = models.greetings, el = greetings.element();
 
             greetings.value('Hello');
-            el.on('droppable', function(e, t) {
+            el.on('droppable', function (e, t) {
                 console.log('drop');
             }, {sync: true});
         });
 
-        app2.controller('ctrl01', function(models){
-            var name = models.name;
-            name.value('Jon');
-        });
-
-        app2.controller('ctrl02', function(models){
-            var name = models.name;
-            name.value('Nick');
+        app2.controller('ctrl01', function (models) {
+            this.model('names', ['Gil', 'Maria', 'Roni', 'Jon', 'Nick'])
+            this.model('players', [{name: 'Maria', age: 19}, {name: 'Gil', age: 19}]);
         });
 
         Ruddy.templating();
+        document.body.style.display = 'block';
     </script>
 </body>
 </html>
