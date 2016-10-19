@@ -1,2 +1,0 @@
-# RuddyJS
-Ruddy Javascript Library
