@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div id="circle" style="margin-top: 40px; border-radius: 50%; width: 60px; height: 60px; background: #999;"></div>
+<script src="../globals/core.js"></script>
+<script src="../globals/object.js"></script>
+<script src="../globals/function.js"></script>
+<script src="../globals/array.js"></script>
+<script src="../globals/string.js"></script>
+<script src="../globals/document.js"></script>
+<script src="../globals/nodes.js"></script>
+<script src="../globals/element.js"></script>
+<script src="../globals/style.js"></script>
+<script src="../ruddy.js"></script>
+<script src="../events/draggable.js"></script>
+<script>
+    $r ('#circle').on('draggable', function (e, t) {
+        console.log('drag.start');
+    }, {axis: 'y', enableTouch: true});
+
+    $r ('#circle').on('drag.move', function (e, t) {
+        console.log('grab.move');
+    });
+
+    $r ('#circle').on('drag.end', function (e, t, el, calls) {
+        console.log('grab.end');
+    });
+</script>
+</body>
+</html>
