@@ -5,21 +5,24 @@
      * @param el
      * @returns {{data: *, braces: *}}
      */
-    function getDataBinding(el) {
+    function getDataBinding(el, models, tag) {
         var html        = el.html(),
-            data        = [],
-            braces      = [],
+            data        = $arr ([]),
+            braces      = $arr ([]),
             rand        = Math.random(),
-            regex       = new RegExp('\/\{' + rand  + '}\/');
+            tag         = tag || {start: '{{', end: '}}'},
+            query       = '[' + tag.start + '].*[' + tag.end +']',
+            regex       = new RegExp('{/{-' + rand  + '--}//}',"g"),
+            start       = new RegExp(tag.start, "g"),
+            end         = new RegExp(tag.end, "g");
 
-        html = html.replace(/,/g, '/{'+ rand +'}/').replace(/{{/g, ',{{').replace(/}}/g, '}},');
-        $arr (html.split(',')).map(function(v, i){
+        html = html.replace(/,/g, '{/{-'+ rand +'--}//}').replace(start, ',{{').replace(end, '}},');
+        $arr (html.split(',')).forEach(function(v, i){
             v = $str (v.replace(regex, ','));
-            if(v.pregMatch(/{{/))
+            if(v.pregMatch(query))
                 braces[i] = v;
 
             data[i] = v;
-            return data;
         });
 
         return {data: data, braces: braces}
@@ -80,8 +83,9 @@
      *
      * @returns {*}
      */
-    function $$cache(attrs) {
-        var apps    = $r (attrs.app),
+    function $$cache(config) {
+        var attrs   = config['attributes'],
+            apps    = $r (attrs.app),
             tree    = {};
 
         apps.each(function(v) {
@@ -119,7 +123,7 @@
                     var
                         viewName    = $el (v).getAttribute(viewExt),
                         el          = $r (v),
-                        html        = getDataBinding(el);
+                        html        = getDataBinding(el, tree[appName].controllers[controllerName].models, config.tag);
 
                     tree[appName].controllers[controllerName].views[g] = {type: viewName, el: el, htmlData: html.data, htmlBraces: html.braces};
                 });
@@ -133,5 +137,5 @@
      *
      * @type {cache}
      */
-    Ruddy.cache['templating'] = $$cache(__core.config.templating['attributes']);
+    Ruddy.cache['templating'] = $$cache(__core.config.templating);
 })(Ruddy, $r);

@@ -11,6 +11,11 @@ Ruddy.config = (function(__core){
      * @type {{}}
      */
     config['templating'] = {
+        tag: {
+            start: '{{',
+            end: '}}'
+        },
+
         attributes: {
             app: '[ruddy-app]',
             controller: '[app-controller]',

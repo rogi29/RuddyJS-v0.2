@@ -20,7 +20,7 @@
     <div ruddy-app="example02">
         <div app-controller="ctrl01">
             <input type="text" value="Greetings" app-model="greetings">
-            <span app-view="html" app-repeat="names"><br><b>{{names}}</b>!</span>
+            <span app-view="html" app-repeat="names"><br>{{greetings}} <b>{{names}}</b>!</span>
             <span app-view="html" app-repeat="players->player">
                 <br><br>
                 <b>Name:</b> {{player.name}},

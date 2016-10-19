@@ -2,21 +2,26 @@
     var cache = __core.cache.templating;
 
     /**
-     * General Binding
+     * Update view cache
      *
      * @param c
      * @param v
+     * @param arr
      */
-    function binding(c, v) {
-        var key, model;
+    function updateCache(c, v, arr) {
+        var data = $arr ([]), braces = $arr ([]);
 
-        v.htmlBraces.forEach(function (b, i) {
-            key = b.replace('{{', '').replace('}}', '');
-            model = c.models[key];
-            if (model)
-                v.htmlData[i] = model.func(model);
+        $arr(c.models[arr[0]].value).forEach(function (e, k) {
+            v.htmlData.forEach(function (h, i) {
+                if(v.htmlData[i].pregMatch(/[{{].*[}}]/))
+                    braces[data.length] = v.htmlData[i];
+
+                data[data.length] = v.htmlData[i];
+            });
         });
-        v.el.html(v.htmlData.join('')).inner();
+
+        v.htmlBraces = braces;
+        v.htmlData = data;
     }
 
     /**
@@ -28,26 +33,20 @@
      * @param arr
      */
     function arrayBinding(c, v, attr, arr) {
-        var key, model;
+        var key, index = 0, model = c.models[arr[0]].value, len = v.htmlData.length / model.length;
 
-        $arr (c.models[arr[0]].value).forEach(function(e, k) {
-            v.htmlBraces.forEach(function (b, i) {
-                if (b == '{{' + attr + '}}'){
-                    v.htmlData[i] = e;
-                    return;
-                }
+        v.htmlBraces.forEach(function (b, i) {
+            if(Math.floor(i/len) > index)
+                index++;
 
-                /*
-                key = b.replace('{{', '').replace('}}', '');
-                model = c.models[key];
-                if (model) {
-                    v.htmlData[i] = model.func(model);
-                }
-                */
-            });
-            v.el.html(v.htmlData.join('')).append();
+            if (b == '{{' + attr + '}}') {
+                v.htmlData[i] = model[index];
+                return;
+            }
         });
+        v.el.html(v.htmlData.join('')).append();
     }
+
 
     /**
      * Multi array Binding
@@ -58,15 +57,36 @@
      * @param arr
      */
     function multArrayBinding(c, v, attr, arr) {
-        var key;
-        $arr(c.models[arr[0]].value).forEach(function (e, k) {
-            v.htmlBraces.forEach(function (b, i) {
-                key = b.replace('{{' + arr[1] + '.', '').replace('}}', '');
-                if (key in e)
-                    v.htmlData[i] = e[key];
-            });
-            v.el.html(v.htmlData.join('')).append();
+        var key, index = 0, model = c.models[arr[0]].value, len = v.htmlData.length / model.length;
+
+        v.htmlBraces.forEach(function (b, i) {
+            if(Math.floor(i/len) > index)
+                index++;
+
+            key = b.replace('{{' + arr[1] + '.', '').replace('}}', '');
+            if (key in model[index]) {
+                v.htmlData[i] = model[index][key];
+            }
         });
+        v.el.html(v.htmlData.join('')).append();
+    }
+
+    /**
+     * General Binding
+     *
+     * @param c
+     * @param v
+     */
+    function binding(c, v) {
+        var key, model;
+
+        v.htmlBraces.forEach(function (b, i) {
+            key = b.replace('{{', '').replace('}}', '');
+            model = c.models[key];
+            if (model && !__core.isArr(model.value))
+                v.htmlData[i] = model.func(model);
+        });
+        v.el.html(v.htmlData.join('')).inner();
     }
 
     /**
@@ -101,18 +121,17 @@
         cache.forEach(function (v) {
             $obj (v.controllers).forEach(function (c) {
                 $arr (c.views).forEach(function (v) {
-                    var repeat = $str (v.el.attribute('app-repeat') || ''), array;
+                    var repeat  = $str (v.el.attribute('app-repeat') || ' '),
+                        array   = (repeat+'-> ').split('->');
 
-                    if(repeat != '') {
+                    if(repeat != ' ' && array[0] in c.models) {
                         v.el.html('').inner();
-                        array = repeat.split('->');
-
-                        if(repeat.pregMatch(/->/g) && array[0] in c.models) {
+                        updateCache(c,v,array);
+                        if(repeat.pregMatch(/->/g)) {
                             multArrayBinding(c, v, repeat, array);
                         } else {
                             arrayBinding(c, v, repeat, array);
                         }
-                        return;
                     }
 
                     binding(c, v);
