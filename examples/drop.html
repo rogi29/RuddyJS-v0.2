@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="area1" style="width: 60px; height: 60px; background: #333;">
+    <div id="circle" style="border-radius: 50%; width: 60px; height: 60px; background: #999;"></div>
+</div>
+
+<div id="area2" style="width: 60px; height: 60px; background: #1787ee;">
+</div>
+<script src="../globals/core.js"></script>
+<script src="../globals/object.js"></script>
+<script src="../globals/function.js"></script>
+<script src="../globals/array.js"></script>
+<script src="../globals/string.js"></script>
+<script src="../globals/document.js"></script>
+<script src="../globals/nodes.js"></script>
+<script src="../globals/element.js"></script>
+<script src="../globals/style.js"></script>
+<script src="../ruddy.js"></script>
+<script src="../events/draggable.js"></script>
+<script src="../events/grabbable.js"></script>
+<script src="../events/droppable.js"></script>
+<script>
+    $r ('#circle').on('grabbable', function (e, t) {
+        console.log('grab.start');
+    });
+
+    $r ('#circle').on('grab.move', function (e, t) {
+        console.log('grab.move');
+    });
+
+    $r ('#circle').on('grab.end', function (e, t) {
+        console.log('grab.end');
+    });
+
+    $r ('#area1').on('droppable', function (e, t) {
+        $r(e.detail.element).style('background', '#1787ee');
+    }, {sync: true});
+
+    $r ('#area2').on('droppable', function (e, t) {
+        $r(e.detail.element).style('background', '#3EEE6A');
+    }, {sync: true});
+</script>
+</body>
+</html>

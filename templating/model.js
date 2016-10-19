@@ -69,7 +69,7 @@
 
     /**
      *
-     * @type {Function}
+     * @type {model}
      */
     __core.model = model;
 })(Ruddy, $r);

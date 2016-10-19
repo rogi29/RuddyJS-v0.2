@@ -65,7 +65,7 @@
                     normalize: function()
                     {
                         obj.style('zIndex', zIndex);
-                        obj.setTranslate(0,0);
+                        obj.setTranslate(0, 0);
                     }
                 },
 

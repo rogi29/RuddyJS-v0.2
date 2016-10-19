@@ -105,7 +105,7 @@
          * @returns {boolean}
          */
         isElement = function(v) {
-            return (v && (v.nodeName || v.tagName || v.className || v.id)) ? true : false;
+            return (v && (v.nodeName || v.tagName || v.className || v.id) && v != document) ? true : false;
         },
 
         /**

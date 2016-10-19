@@ -21,13 +21,13 @@
         var ctrl = this.ctrl[this.index] = this.app.controllers[controllerName];
 
         this.models[this.index] = {};
-        this.ctrl[this.index]['model'] = $func (function(modelName, value) {
+        this.ctrl[this.index]['model'] = function(modelName, value) {
             var func = function(target) {
                 return target.value;
             }
             ctrl.models[modelName] = {name: modelName, value: value, defaultFunc: func, func: func};
             return __core.model(ctrl.models[modelName]);
-        }).bind(this);
+        };
 
         $obj (this.ctrl[this.index].models).forEach($func (function(v, k){
             this.models[this.index][k] = __core.model(v);
