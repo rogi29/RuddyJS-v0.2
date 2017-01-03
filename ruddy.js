@@ -1,12 +1,13 @@
 /**
- * ruddyJS JavaScript Library
+ * RuddyJS JavaScript Library
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs
  */
 
 (function(__core){
@@ -22,7 +23,7 @@
         /**
          * Document
          *
-         * @type {HTMLDocument}
+         * @type {(HTMLDocument|$doc)}
          */
         doc = $doc (document),
 
@@ -34,9 +35,10 @@
         css = $css (doc.createStyle('ruddyjs'));
 
     /**
-     * Ruddy Library
+     * $r Library Object
      *
      * @param param
+     * @type {{assign, find, each, html, attribute, createRule, css, style, when, then, or, on, position, size, getTranslate, setTranslate}}
      * @returns {$r}
      */
     var $r = $obj (function(param) {
@@ -58,6 +60,7 @@
         } else {
             if (__core.isEl(param)) {
                 el = $el (param);
+                param = index;
             } else if (__core.isStr(param)) {
                 el = $nodes (doc.querySelectorAll(param));
                 el = (el.length == 1) ? $el(el.first()) : el;
@@ -84,7 +87,7 @@
         var key = this.param + ':' + selectors, el = this.el;
 
         if($$rCache[key]) {
-            return $r(key);
+            return $r (key);
         }
 
         el = $nodes ($el(el).querySelectorAll(selectors));
@@ -110,7 +113,7 @@
             return this;
         }
 
-        callback.call(this, this.el, 0, this.el);
+        callback.call(this, obj, 0, obj);
         return this;
     }));
 
@@ -129,14 +132,14 @@
         return {
             inner: function () {
                 if (__core.isFunc(content))
-                    return el.innerHTML = content.call(obj);
+                    return el.innerHTML = content.call(el);
 
                 return el.innerHTML = content;
             },
 
             append: function () {
                 if (__core.isFunc(content))
-                    return el.innerHTML += content.call(obj);
+                    return el.innerHTML += content.call(el);
 
                 return (el.innerHTML += content);
             }
@@ -178,7 +181,8 @@
      * @returns {*}
      */
     $r.assign('css', $func (function(rule, value) {
-        var css = this.rule, rule = rule+'';
+        var css = this.rule;
+        rule += '';
 
         if(!value)
             return css.style[rule];
@@ -194,7 +198,8 @@
      * @returns {*}
      */
     $r.assign('style', $func (function(rule, value) {
-        var el = this.el, rule = rule+'';
+        var el = this.el;
+        rule += '';
 
         if(!value)
             return el.style[rule];
@@ -219,7 +224,8 @@
     }));
 
     /**
-     * Execute if
+     * Execute if statment
+     *
      * @param callback
      * @returns {$r}
      */
@@ -337,7 +343,7 @@
      */
     $r.assign('setTranslate', $func (function(x, y) {
         if('transform' in document.body.style) {
-            this.style('transform', 'translate(' + x + 'px, ' + y + 'px)')
+            this.style('transform', 'translate(' + x + 'px, ' + y + 'px)');
             return this;
         }
 
@@ -347,9 +353,39 @@
     }));
 
     /**
-     * $r in window
+     * Set Translate Values
      *
-     * @type {{find: *, each: *, html: *, attribute: *, createRule: *, css: *, style: *, when: *, then: *, or: *, on: *, position: *, size: *, getTranslate: *, setTranslate: *}}
+     * @returns {*}
+     */
+    $r.assign('setTranslateX', $func (function(x) {
+        if('transform' in document.body.style) {
+            this.style('transform', 'translateX(' + x + 'px)');
+            return this;
+        }
+
+        this.style('left', x + 'px');
+        return this;
+    }));
+
+    /**
+     * Set Translate Values
+     *
+     * @returns {*}
+     */
+    $r.assign('setTranslateY', $func (function(y) {
+        if('transform' in document.body.style) {
+            this.style('transform', 'translateY(' + y + 'px)');
+            return this;
+        }
+
+        this.style('left', y + 'px');
+        return this;
+    }));
+
+    /**
+     * $r
+     *
+     * @type function
      */
     window.$r = $r;
 })(Ruddy);

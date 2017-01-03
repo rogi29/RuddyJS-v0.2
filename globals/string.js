@@ -1,21 +1,29 @@
 /**
- * ruddyJS Globals - string
+ * RuddyJS Globals - String
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 (function(__core){
+    /**
+     * Global String Wrapper
+     *
+     * @param str
+     * @returns {*}
+     */
     var string = function(str) {
         if(__core.isStr(str) === false)
-            throw new TypeError("$str type - argument provided is not a function type");
+            throw new TypeError("String type - argument provided is not a string type");
 
         var prototype = {
             /**
+             * Check if string is empty
              *
              * @returns {boolean}
              */
@@ -26,6 +34,7 @@
             },
 
             /**
+             * Native toLowerCase function polyfill
              *
              * @returns {string}
              */
@@ -37,6 +46,7 @@
             }),
 
             /**
+             * Native toUpperCase function polyfill
              *
              * @returns {string}
              */
@@ -48,6 +58,7 @@
             }),
 
             /**
+             * Set first character to upper case
              *
              * @returns {string}
              */
@@ -57,6 +68,7 @@
             },
 
             /**
+             * Apply regex and checks if true or false
              *
              * @param regex
              * @returns {boolean}
@@ -65,6 +77,29 @@
             {
                 var reg = new RegExp(regex);
                 return reg.test(str);
+            },
+
+            /**
+             * Escape html string
+             *
+             * @returns {string|string|*}
+             */
+            escapeHTML: function() {
+                var div = document.createElement('div');
+                div.appendChild(document.createTextNode(str));
+                return div.innerHTML;
+            },
+
+            /**
+             * Convert escaped string to html string
+             *
+             * @returns {string|HTML}
+             */
+            toHTML: function() {
+                var div = document.createElement('div');
+                div.innerHTML = str;
+                var child = div.childNodes[0];
+                return child ? child.nodeValue : '';
             }
         };
 

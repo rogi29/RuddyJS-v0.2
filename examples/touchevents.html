@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Touch Gestures</title>
+</head>
+<body>
+
+<div style="display:flex;">
+    <div class="tap input" style="margin-top: 40px; width: 60px; height: 60px; background: #bbb;">touch</div>
+    <div class="tap output" style="margin-top: 40px; width: 60px; height: 60px; background: #eee;"></div>
+</div>
+
+<div style="display:flex;">
+    <div class="doubletap input" style="margin-top: 40px; width: 60px; height: 60px; background: #bbb;">touch</div>
+    <div class="doubletap output" style="margin-top: 40px; width: 60px; height: 60px; background: #eee;"></div>
+</div>
+
+<div style="display:flex;">
+    <div class="press input" style="margin-top: 40px; width: 60px; height: 60px; background: #bbb;">touch</div>
+    <div class="press output" style="margin-top: 40px; width: 60px; height: 60px; background: #eee;"></div>
+</div>
+
+<script src="../globals/core.js"></script>
+<script src="../globals/object.js"></script>
+<script src="../globals/function.js"></script>
+<script src="../globals/array.js"></script>
+<script src="../globals/string.js"></script>
+<script src="../globals/document.js"></script>
+<script src="../globals/nodes.js"></script>
+<script src="../globals/element.js"></script>
+<script src="../globals/style.js"></script>
+<script src="../ruddy.js"></script>
+<script src="../events/tap.js"></script>
+<script src="../events/press.js"></script>
+<script src="../events/doubletap.js?1"></script>
+<script>
+    $r ('.tap.input').on('tap', function(e, t) {
+        $r ('.tap.output').html(e.detail.delay).inner();
+    });
+
+    $r ('.doubletap.input').on('doubletap', function(e, t) {
+        $r ('.doubletap.output').html(e.detail.delay).inner();
+    });
+
+    $r ('.press.input').on('press', function(e, t) {
+        $r ('.press.output').html(e.detail.delay).inner();
+    });
+</script>
+</body>
+</html>

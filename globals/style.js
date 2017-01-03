@@ -1,25 +1,49 @@
 /**
- * ruddyJS Globals - style
+ * RuddyJS Globals - Style
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 (function(__core){
+    /**
+     * Global Style Wrapper
+     *
+     * @param css
+     * @returns {*}
+     */
     var style = function(css) {
         var prototype = {
+            /**
+             *
+             * @param index
+             * @returns {CssRule|CSSRule}
+             */
             getRule: function(index) {
                 return css.cssRules[index];
             },
 
+            /**
+             *
+             * @param index
+             * @returns {string}
+             */
             getCSSText: function(index) {
                 return css.cssRules[index].cssText;
             },
 
+            /**
+             * Native insertRule function polyfill
+             *
+             * @param rule
+             * @param index
+             * @returns {*}
+             */
             insertRule: ('CSSStyleSheet' in window) ? CSSStyleSheet.prototype.insertRule : function(rule, index) {
                 var arr;
                 rule = rule.replace(/\s+/g, '');
@@ -28,10 +52,20 @@
                 return index;
             },
 
+            /**
+             * Native deleteRule function polyfill
+             *
+             * @param index
+             */
             deleteRule: ('CSSStyleSheet' in window) ? CSSStyleSheet.prototype.deleteRule : function(index) {
                 return css.removeRule(index);
             },
 
+            /**
+             *
+             * @param rule
+             * @returns {string}
+             */
             ruleToJson: function(rule) {
                 var rule = rule.replace(/\s+/g, ''),
                     rule = rule.split('{'),
@@ -41,6 +75,11 @@
                 return json;
             },
 
+            /**
+             *
+             * @param json
+             * @returns {*}
+             */
             jsonToRule: function(json) {
                 var selector = JSON.parse(json)['selector'],
                     rule = selector + json.replace(/"/g, '').replace(/,/g, ';').replace('selector:' + selector + ';', '');
@@ -48,6 +87,11 @@
                 return rule;
             },
 
+            /**
+             *
+             * @param rule
+             * @returns {{}}
+             */
             ruleToObj: function(rule) {
                 var rule = rule.replace(/\s+/g, ''),
                     obj = {}, style = null, i = 0,
@@ -68,6 +112,11 @@
                 return obj;
             },
 
+            /**
+             *
+             * @param obj
+             * @returns {string}
+             */
             objToRule: function(obj) {
                 var str = '', selector, style;
                 for (selector in obj) {

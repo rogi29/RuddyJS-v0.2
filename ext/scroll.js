@@ -1,12 +1,13 @@
 /**
- * ruddyJS Extenstions - scroll
+ * RuddyJS Extenstions - Scroll
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/extenstions
  */
 
 (function(__core, $r) {
@@ -35,7 +36,7 @@
     }
 
     /**
-     * scroll page X and Y
+     * scroll page both X and Y axis
      *
      * @param x
      * @param y
@@ -65,8 +66,12 @@
                 delta:      delta,
 
                 step: function(delta){
+                    if(minX == x && minY == y)
+                        return;
+
                     nx = minX + (x-minX)*delta;
                     ny = minY + (y-minY)*delta;
+
                     window.scrollTo(nx, ny);
                 }
             },
@@ -76,7 +81,7 @@
     }));
 
     /**
-     * scroll page X only
+     * scroll page the X axis only
      *
      * @param to
      * @param settings
@@ -102,6 +107,8 @@
                 delay:      delay,
                 duration:   duration * 1000 || 1000,
                 delta:      delta,
+                startPoint: minX,
+                endPoint:   to,
 
                 step: function(delta){
                     nx = minX + (to-minX)*delta;
@@ -114,7 +121,7 @@
     }));
 
     /**
-     * scroll page Y only
+     * scroll page the Y axis only
      *
      * @param to
      * @param settings
@@ -128,8 +135,6 @@
                 false
             );
 
-        console.log(minY);
-
         if(__core.isObj(settings)) {
             delay       = settings.delay        || delay;
             duration    = settings.duration     || duration;
@@ -142,6 +147,8 @@
                 delay:      delay,
                 duration:   duration * 1000 || 1000,
                 delta:      delta,
+                startPoint: minY,
+                endPoint:   to,
 
                 step: function(delta){
                     ny = minY + (to-minY)*delta;

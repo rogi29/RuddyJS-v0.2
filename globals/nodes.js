@@ -1,21 +1,33 @@
 /**
- * ruddyJS Globals - nodes
+ * RuddyJS Globals - Nodes
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 (function(__core){
+    /**
+     * Global NodeList Wrapper
+     *
+     * @param nodes
+     * @returns {*}
+     */
     var nodeList = function(nodes) {
         if(__core.isNodes(nodes) === false)
-            throw new TypeError("$nods type - argument provided is not a nodeList type");
+            throw new TypeError("Nodes type - argument provided is not a nodeList type");
 
+        /**
+         *
+         * @type {{push: push, concat: concat, forEach: (*|Function), map: map, first: first, last: last, isOne: isOne, indexOf: indexOf}}
+         */
         var prototype = {
             /**
+             * Native push function for a nodeList
              *
              * @returns {Number}
              */
@@ -31,6 +43,7 @@
             },
 
             /**
+             * Native concat function for a nodeList
              *
              * @returns {string[]}
              */
@@ -46,6 +59,7 @@
             },
 
             /**
+             * Native forEach function for a nodeList
              *
              * @param f
              * @param p
@@ -62,6 +76,7 @@
             }),
 
             /**
+             * Native map function for a nodeList
              *
              * @param f
              * @param p
@@ -80,6 +95,7 @@
             },
 
             /**
+             * Get first element
              *
              * @returns {*}
              */
@@ -92,6 +108,7 @@
             },
 
             /**
+             * Get last element
              *
              * @returns {*}
              */
@@ -104,6 +121,7 @@
             },
 
             /**
+             * Check if nodeList length is one
              *
              * @returns {boolean}
              */
@@ -116,6 +134,7 @@
             },
 
             /**
+             * Native indexOf function for a nodeList
              *
              * @param value
              * @returns {*}

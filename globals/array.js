@@ -1,21 +1,33 @@
 /**
- * ruddyJS Globals - array
+ * RuddyJS Globals - Array
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 (function(__core){
+    /**
+     * Global array wrapper
+     *
+     * @param arr
+     * @returns {Array|*}
+     */
     var array = function(arr) {
         if(__core.isArr(arr) === false)
-            throw new TypeError("$arr type - argument provided is not a function type");
+            throw new TypeError("Array type - argument provided is not a array type");
 
+        /**
+         *
+         * @type {{isEmpty: isEmpty, join: (*|Function), push: (*|Function), pop: (*|Function), reverse: (*|Function), concat: (*|Function), forEach: (*|Function), map: (*|Function), reduce: (*|Function), indexOf: (*|Function), first: first, last: last}}
+         */
         var prototype = {
             /**
+             * Checks if array is empty
              *
              * @returns {boolean}
              */
@@ -24,6 +36,7 @@
             },
 
             /**
+             * Native join function polyfill
              *
              * @param c
              * @returns {string}
@@ -41,6 +54,7 @@
             }),
 
             /**
+             * Native push function polyfill
              *
              * @returns {Number}
              */
@@ -56,6 +70,41 @@
             }),
 
             /**
+             * Native pop function polyfill
+             *
+             * @returns {*}
+             */
+            pop: (Array.prototype.pop || function() {
+                "use strict";
+                var last;
+
+                if(arr.length <= 0)
+                    return undefined;
+
+                last = arr[arr.length - 1];
+                arr.length = arr.length - 1;
+                return last;
+            }),
+
+            /**
+             * Native reverse function polyfill
+             *
+             * @returns {Array}
+             */
+            reverse: (Array.prototype.reverse || function() {
+                "use strict";
+                var len = arr.length - 1, id = 0, i = 0, a = [];
+
+                for(len; len >= i; len--) {
+                    a[id] = arr[len];
+                    id++;
+                }
+
+                return a;
+            }),
+
+            /**
+             * Native concat function polyfill
              *
              * @returns {string[]}
              */
@@ -71,6 +120,7 @@
             }),
 
             /**
+             * Native forEach function polyfill
              *
              * @param f
              * @param p
@@ -87,6 +137,7 @@
             }),
 
             /**
+             * Native map function polyfill
              *
              * @param f
              * @param p
@@ -105,6 +156,7 @@
             }),
 
             /**
+             * Native reduce function polyfill
              *
              * @param callback
              * @returns {*}
@@ -137,28 +189,7 @@
             }),
 
             /**
-             *
-             * @returns {*}
-             */
-            first: function () {
-                if(arr.length == 0)
-                    throw new TypeError('Cant retrieve first element of an empty array with no initial value');
-
-                return arr[0];
-            },
-
-            /**
-             *
-             * @returns {*}
-             */
-            last: function () {
-                if(arr.length == 0)
-                    throw new TypeError('Cant retrieve last element of an empty array with no initial value');
-
-                return arr[arr.length - 1];
-            },
-
-            /**
+             * Native indexOf function polyfill
              *
              * @param elt
              * @returns {number}
@@ -180,11 +211,39 @@
                         return from;
                 }
                 return -1;
+            },
+
+            /**
+             * Get first element of array
+             *
+             * @returns {*}
+             */
+            first: function () {
+                if(arr.length <= 0)
+                    return undefined;
+
+                return arr[0];
+            },
+
+            /**
+             * Get last element of array
+             *
+             * @returns {*}
+             */
+            last: function () {
+                if(arr.length <= 0)
+                    return undefined;
+
+                return arr[arr.length - 1];
             }
         };
 
         return __core.assign(arr, prototype);
     };
 
+    /**
+     *
+     * @type array
+     */
     window.$arr = array;
 })(Ruddy);

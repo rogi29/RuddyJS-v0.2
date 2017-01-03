@@ -1,17 +1,24 @@
 /**
- * ruddyJS Extenstions - history
+ * RuddyJS Extenstions - History
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/extenstions
  */
 
 (function (__core, $r) {
     "use strict";
 
+    /**
+     * Push state
+     *
+     * @param title
+     * @param response
+     */
     $r.assign('pushState', function(title, response) {
         if(!this.param.url)
             throw new TypeError('Url is not valid.');

@@ -1,21 +1,33 @@
 /**
- * ruddyJS Globals - object
+ * ruddyJS Globals - Object
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 (function(__core){
+    /**
+     * Global Object Wrapper
+     *
+     * @param obj
+     * @returns {*}
+     */
     var object = function(obj) {
         if(__core.isObj(obj) === false)
-            throw new TypeError("$obj type - argument provided is not an Object type");
+            throw new TypeError("Object type - argument provided is not an object type");
 
+        /**
+         *
+         * @type {{keys: keys, values: values, push: push, map: map, forEach: forEach, assign: assign, extend: extend}}
+         */
         var prototype = {
             /**
+             * Get all keys of an object
              *
              * @returns {Array}
              */
@@ -34,6 +46,7 @@
             },
 
             /**
+             * Get all values of an object
              *
              * @returns {Array}
              */
@@ -52,6 +65,7 @@
             },
 
             /**
+             * Native push function for an object
              *
              * @returns {Number}
              */
@@ -68,6 +82,7 @@
             },
 
             /**
+             * Native map function for an object
              *
              * @param f
              * @param p
@@ -86,6 +101,7 @@
             },
 
             /**
+             * Native forEach function for an object
              *
              * @param f
              * @param p
@@ -104,6 +120,7 @@
             },
 
             /**
+             * Assign a function in prototype
              *
              * @param name
              * @param func
@@ -134,5 +151,9 @@
         return __core.assign(obj, prototype);
     };
 
+    /**
+     *
+     * @type {{assign}}
+     */
     window.$obj = object;
 })(Ruddy);

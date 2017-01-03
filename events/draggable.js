@@ -1,12 +1,13 @@
 /**
- * ruddyJS Events - Draggable
+ * RuddyJS Events - Draggable
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/events
  */
 
 (function (__core) {
@@ -15,7 +16,8 @@
      *
      * @param element
      * @param callback
-     * @returns {*}
+     *
+     * @returns {*} drag.start event
      */
     __core.events['draggable'] = function (element, callback, settings) {
 
@@ -29,6 +31,12 @@
         if(position != 'absolute')
             obj.style('position', 'relative');
 
+        /**
+         * Start drag event
+         *
+         * @param e
+         * @param t
+         */
         function start(e, t) {
             var event, mouse;
 
@@ -52,6 +60,12 @@
             isDown = true;
         }
 
+        /**
+         * Move drag event
+         *
+         * @param e
+         * @param t
+         */
         function move(e, t) {
             var event, mouse;
 
@@ -85,13 +99,21 @@
                         obj.setTranslate(x, y);
                         break;
                 }
-
                 element.dispatchEvent(event);
             }
         }
 
+        /**
+         * End drag event
+         *
+         * @param e
+         * @param t
+         */
         function end(e, t){
             var event;
+
+            rect        = obj.position();
+            translate   = obj.getTranslate();
 
             if(isDown) {
                 event = $doc (document).customEvent("drag.end", {
@@ -99,27 +121,25 @@
                         about: 'Fired when a drag operation is being ended (for example, by releasing a mouse button)',
                         x: x,
                         y: y,
-                        defaultX: rect.x,
-                        defaultY: rect.y,
-                        translateX: translate.x,
-                        translateY: translate.y,
-                        normalize: function()
-                        {
-                            obj.style('zIndex', zIndex);
-                            obj.setTranslate(0, 0);
-                        }
+                        position: rect,
+                        translate: translate,
+                        normalize: settings.normalize || false
                     },
 
                     bubbles: true,
                     cancelable: true
                 });
 
+
+                if(settings.normalize) {
+                    obj.setTranslate(0, 0);
+                }
                 element.dispatchEvent(event);
                 isDown = false;
             }
         }
 
-        if(settings.enableTouch) {
+        if(settings.disableTouch !== true) {
             obj.on('touchstart', start);
             $r(document).on('touchmove', move);
             $r(document).on('touchend', end);

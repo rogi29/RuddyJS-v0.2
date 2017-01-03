@@ -2,15 +2,15 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Drop</title>
 </head>
 <body>
+<div id="circle2" style="border-radius: 50%; width: 60px; height: 60px; background: #999;"></div>
 <div id="area1" style="width: 60px; height: 60px; background: #333;">
     <div id="circle" style="border-radius: 50%; width: 60px; height: 60px; background: #999;"></div>
 </div>
-
-<div id="area2" style="width: 60px; height: 60px; background: #1787ee;">
-</div>
+<div id="area2" style="width: 60px; height: 60px; background: #1787ee;"></div>
 <script src="../globals/core.js"></script>
 <script src="../globals/object.js"></script>
 <script src="../globals/function.js"></script>
@@ -26,23 +26,19 @@
 <script src="../events/droppable.js"></script>
 <script>
     $r ('#circle').on('grabbable', function (e, t) {
-        console.log('grab.start');
-    });
+        $r (t).style('background', '#bbb');
+    }, {normalize: true});
 
-    $r ('#circle').on('grab.move', function (e, t) {
-        console.log('grab.move');
-    });
-
-    $r ('#circle').on('grab.end', function (e, t) {
-        console.log('grab.end');
-    });
+    $r ('#circle2').on('draggable', function (e, t) {
+        $r (t).style('background', '#bbb');
+    }, {normalize: true});
 
     $r ('#area1').on('droppable', function (e, t) {
-        $r(e.detail.element).style('background', '#1787ee');
+        $r (e.detail.element).style('background', 'lightblue');
     }, {sync: true});
 
     $r ('#area2').on('droppable', function (e, t) {
-        $r(e.detail.element).style('background', '#3EEE6A');
+        $r (e.detail.element).style('background', 'lightgreen');
     }, {sync: true});
 </script>
 </body>

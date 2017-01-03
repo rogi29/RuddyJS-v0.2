@@ -1,13 +1,15 @@
 /**
- * ruddyJS Extenstions - animation
+ * RuddyJS Extenstions - Animation
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/extenstions
  */
+
 (function(__core, $r){
     "use strict";
     /**
@@ -50,6 +52,16 @@
     });
 
     /**
+     *
+     * @param callback
+     * @returns {Number}
+     */
+    $r.assign('requestAnimation', function(callback) {
+        return window.requestAnimationFrame(callback);
+    });
+
+
+    /**
      * Start animation
      *
      * @param opts
@@ -61,8 +73,6 @@
             timePassed, progress, delta,
             condition = condition || true;
 
-        console.log(opts);
-
         if(opts === false){
             this.animation = $func (function () {
                 if (callback) { callback.apply(el); }
@@ -72,7 +82,7 @@
         }
 
         this.animation = $func (function () {
-            if(!condition) return;
+            if(!condition || opts.startPoint == opts.endPoint) return;
 
             timePassed = new Date - start;
             progress = timePassed / opts.duration;
@@ -107,15 +117,7 @@
     /**
      * Animate (set values)
      *
-     * @param style (x=translateX(), y=translateY(), xy=translate())
-     * @param startPoint
-     * @param endPoint
-     * @param delay
-     * @param duration
-     * @param delta
-     * @param ext
-     * @param callback
-     * @param condition
+     * @param params {style: *, startPoint: *, endPoint: *, delay: *, duration: *, delta: *, ext: *, callback: *, condition: *}
      */
     $r.assign('animate', $func (function(params) {
         var
@@ -143,13 +145,13 @@
                 var minimum = startPoint + (endPoint-startPoint)*delta;
                 switch(style){
                     case 'x':
-                        $r (el).style('transform', 'translateX(' + currValue(startPoint, endPoint, delta) + ext + ')');
+                        $r (el).setTranslateX(currValue(startPoint, endPoint, delta));
                         break;
                     case 'y':
-                        $r (el).style('transform', 'translateY(' + currValue(startPoint, endPoint, delta) + ext + ')');
+                        $r (el).setTranslateY(currValue(startPoint, endPoint, delta));
                         break;
                     case 'xy':
-                        $r (el).style('transform', 'translate(' + currValue(startPoint['x'], endPoint['x'], delta) + ext + ', ' + currValue(startPoint['y'], endPoint['y'], delta) + ext + ')');
+                        $r (el).setTranslate(currValue(startPoint['x'], endPoint['x'], delta), currValue(startPoint['y'], endPoint['y'], delta));
                         break;
                     default:
                         $r (el).style(style, minimum + ext);
@@ -291,7 +293,7 @@
     /**
      * Extend
      *
-     * @type {{setAni: *, cancelAnimation: *, animate: *, getDelta: *, setDelta: *, setEase: *}}
+     * @type {{requestAnimation: *, setAni: *, cancelAnimation: *, animate: *, getDelta: *, setDelta: *, setEase: *}}
      */
     window.$r = $r;
 })(Ruddy, $r);

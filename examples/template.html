@@ -23,10 +23,25 @@
             <span app-view="html" app-repeat="names"><br>{{greetings}} <b>{{names}}</b>!</span>
             <span app-view="html" app-repeat="players->player">
                 <br><br>
-                <b>Name:</b> {{player.name}},
+                <b>Name:</b> {{player.sname}},
                 <br>
                 <b>Age:</b> {{player.age}}
             </span>
+        </div>
+
+        <div app-component="alarm">Warning</div>
+        <div app-component="alarm">Log Out</div>
+
+        <div app-controller="ctrl02">
+            <input type="text" value="Greetings" app-model="text">
+            <input type="submit" app-model="button=[text]">
+            <span app-view="html"><br>{{button.text}}</span>
+        </div>
+
+        <div app-controller="ctrl04">
+            <input type="text" value="Greetings" app-model="text">
+            <input type="submit" app-model="submitText">
+            <span app-view="html"><br>{{submitText}}</span>
         </div>
     </div>
     <script src="../globals/core.js"></script>
@@ -49,8 +64,24 @@
     <script src="../templating/cache.js"></script>
     <script src="../templating/model.js"></script>
     <script src="../templating/app.js"></script>
+    <script src="../templating/component.js"></script>
     <script src="../templating/templating.js"></script>
     <script>
+        var html =
+                '<div app-controller="hello2"> ' +
+                '<input app-model="text" value="hello alarm" /> ' +
+                '<div app-view="html"> {{text}}  {{this.inner}}</div> ' +
+                '<div>';
+
+        var component = new Ruddy.component('alarm', html);
+
+        component.controller('hello2', function(models) {
+            console.log(models.text.value());
+        });
+    </script>
+    <script>
+        Ruddy.cacheTemplate(Ruddy);
+
         var app = new Ruddy.app('example01');
         var app2 = new Ruddy.app('example02');
 
@@ -72,6 +103,13 @@
         app2.controller('ctrl01', function () {
             this.model('names', ['Gil', 'Maria', 'Roni', 'Jon', 'Nick'])
             this.model('players', [{name: 'Maria', age: 19}, {name: 'Gil', age: 19}]);
+        });
+
+        app2.controller('ctrl04', function (models) {
+            var text = models.text;
+            models.submitText.callback(function() {
+                return text.value();
+            });
         });
 
         Ruddy.templating();

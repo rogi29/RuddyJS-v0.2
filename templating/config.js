@@ -1,3 +1,15 @@
+/**
+ * RuddyJS Templating - Config
+ *
+ *  @package    ruddyJS
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
+ *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
+ *  @version    0.0.2
+ *
+ * http://ruddymonkey.com/ruddyjs/templating
+ */
+
 Ruddy.config = (function(__core){
     /**
      *
@@ -17,10 +29,11 @@ Ruddy.config = (function(__core){
         },
 
         attributes: {
-            app: '[ruddy-app]',
-            controller: '[app-controller]',
-            model: '[app-model]',
-            view: '[app-view]'
+            app: 'ruddy-app',
+            component: 'app-component',
+            controller: 'app-controller',
+            model: 'app-model',
+            view: 'app-view'
         }
     };
 

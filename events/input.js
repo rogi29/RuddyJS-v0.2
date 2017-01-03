@@ -1,12 +1,13 @@
 /**
- * ruddyJS Events - input
+ * RuddyJS Events - Input
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/events
  */
 
 (function(__core){
@@ -15,10 +16,34 @@
      *
      * @param element
      * @param callback
-     * @returns {*}
+     *
+     * @returns {*} input|keyup
      */
     __core.events['input'] = function(element, callback) {
         var target, calls = 0;
+
+        /**
+         *
+         * @param e
+         */
+        function call(e) {
+            e = e || window.event;
+            target = e.target || e.srcElement;
+
+            calls++;
+            callback.call(this, e, target, element, calls);
+        }
+
+        /**
+         *
+         * @param e
+         */
+        function before(e)  {
+            e = e || window.event;
+            target = e.target || e.srcElement;
+
+            callback.call(this, e, target, element, calls);
+        }
 
         if(__core.isEvent('input')) {
             if (navigator.userAgent.indexOf('MSIE 9') !== -1) {
@@ -39,36 +64,11 @@
                 });
             }
 
-            return element.addEventListener('input', function (e) {
-                e = e || window.event;
-                target = e.target || e.srcElement;
-
-                calls++;
-                callback.call(this, e, target, element, calls);
-            }, false);
+            return element.addEventListener('input', call, false);
         }
 
-        element.addEventListener('keydown', function(e) {
-            e = e || window.event;
-            target = e.target || e.srcElement;
-
-            callback.call(this, e, target, element, calls);
-        });
-
-        element.addEventListener('keypress', function(e) {
-            e = e || window.event;
-            target = e.target || e.srcElement;
-
-            callback.call(this, e, target, element, calls);
-        });
-
-        return element.addEventListener('keyup', function(e) {
-            e = e || window.event;
-            target = e.target || e.srcElement;
-
-            calls++;
-            callback.call(this, e, target, element, calls);
-            return calls;
-        });
+        element.addEventListener('keydown', before);
+        element.addEventListener('keypress', before);
+        return element.addEventListener('keyup', call);
     };
 })(Ruddy);

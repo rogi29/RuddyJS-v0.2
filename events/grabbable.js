@@ -1,12 +1,13 @@
 /**
- * ruddyJS Events - Grabbable
+ * RuddyJS Events - Grabbable
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/events
  */
 
 (function (__core) {
@@ -15,7 +16,8 @@
      *
      * @param element
      * @param callback
-     * @returns {*}
+     *
+     * @returns {*} grab.start event
      */
     __core.events['grabbable'] = function (element, callback, settings) {
         var obj = this, calls = 0, isDown = false,
@@ -28,6 +30,12 @@
         if(position != 'absolute')
             obj.style('position', 'relative');
 
+        /**
+         * Start and End grag events
+         *
+         * @param e
+         * @param t
+         */
         function start(e, t) {
             var event, mouse;
 
@@ -58,25 +66,28 @@
                     about: 'Fired when a grab operation is being ended (for example, by releasing a mouse button)',
                     x: x,
                     y: y,
-                    defaultX: rect.x,
-                    defaultY: rect.y,
-                    translateX: translate.x,
-                    translateY: translate.y,
-                    normalize: function()
-                    {
-                        obj.style('zIndex', zIndex);
-                        obj.setTranslate(0, 0);
-                    }
+                    position: rect,
+                    translate: translate,
+                    normalize: settings.normalize || false
                 },
 
                 bubbles: true,
                 cancelable: true
             });
 
+            if(settings.normalize) {
+                obj.setTranslate(0, 0);
+            }
             element.dispatchEvent(event);
             isDown = false;
         }
 
+        /**
+         * Move grab event
+         *
+         * @param e
+         * @param t
+         */
         function move(e, t) {
             var event, mouse;
 

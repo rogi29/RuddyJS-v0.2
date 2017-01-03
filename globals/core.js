@@ -1,12 +1,13 @@
 /**
- * ruddyJS Core Globals
+ * RuddyJS Core Globals
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/globals
  */
 
 /**
@@ -209,6 +210,10 @@
             return isSupported;
         };
 
+    /**
+     *
+     * @type {{assign: (assign|*|Function), cache: {}, events: {}, isObj: isObject, isFunc: isFunction, isArr: Function, isEl: isElement, isStr: isString, isNum: isNumber, isInt: (*|Function), isFloat: isFloat, isDate: isDate, isBool: isBool, isNodes: isNodes, isDoc: isDoc, isEvent: isEvent}}
+     */
     window.Ruddy = {
         assign: objectAssign,
         cache: {},

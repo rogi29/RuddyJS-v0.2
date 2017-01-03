@@ -1,12 +1,13 @@
 /**
- * ruddyJS Events - Droppable
+ * RuddyJS Events - Droppable
  *
  *  @package    ruddyJS
- *  @author     Gil Nimer
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
  *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
  *  @version    0.0.2
  *
- * http://ruddymonkey.com/
+ * http://ruddymonkey.com/ruddyjs/events
  */
 
 (function (__core) {
@@ -15,19 +16,19 @@
      *
      * @param element
      * @param callback
-     * @returns {*}
+     *
+     * @returns {*} drop.enter event
      */
     __core.events['droppable'] = function (element, callback, settings) {
         var obj = this, calls = 0, settings = settings || {}, target;
-
 
         function drop(e, t)
         {
             var
                 target = {
                     obj:        $r (t),
-                    translate:  $r (t).getTranslate(),
-                    pos:        $r (t).position(),
+                    translate:  e.detail.translate,
+                    pos:        e.detail.position,
                     size:       $r (t).size()
                 },
                 area = {
@@ -42,28 +43,25 @@
                 && (area.pos.y - target.size.height) < target.pos.y
                 && (area.pos.y + area.size.height) >  target.pos.y ) {
 
-                function start (e, t) {
-                    var event = new CustomEvent("drop.enter", {
-                        detail: {
-                            about: 'Fired when an element is dropped on a valid drop area',
-                            element: t
-                        },
-                        bubbles: true,
-                        cancelable: true
-                    });
+                var event = new CustomEvent("drop.enter", {
+                    detail: {
+                        about: 'Fired when an element is dropped on a valid drop area',
+                        element: t
+                    },
+                    bubbles: true,
+                    cancelable: true
+                });
 
-                    element.dispatchEvent(event);
-                    if(settings.sync) {
-                        $r (t).setTranslate(x, y);
-                    }
+                element.dispatchEvent(event);
+                if(settings.sync) {
+                    $r (t).setTranslate(x, y);
                 }
-
-                $r (t).on('drag.end', start);
-                $r (t).on('grab.end', start);
             }
         }
 
-        $r(document).on('mouseup', drop);
+        $r(document).on('grab.end', drop);
+        $r(document).on('drag.end', drop);
+
         return obj.on('drop.enter', function (e) {
             e = e || window.event;
             target = e.target || e.srcElement;

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animation</title>
+</head>
+<body>
+<div id="circle" style="border-radius: 50%; width: 60px; height: 60px; background: #999;"></div>
+
+<script src="../globals/core.js"></script>
+<script src="../globals/object.js"></script>
+<script src="../globals/function.js"></script>
+<script src="../globals/array.js"></script>
+<script src="../globals/string.js"></script>
+<script src="../globals/element.js"></script>
+<script src="../globals/nodes.js"></script>
+<script src="../globals/document.js"></script>
+<script src="../globals/style.js"></script>
+<script src="../events/input.js"></script>
+<script src="../ruddy.js"></script>
+<script src="../ext/animation.js"></script>
+<script>
+    $r ('#circle').animate({
+        style:      'x',
+        startPoint: 0,
+        endPoint:   100,
+        duration:   0.5
+    });
+</script>
+</body>
+</html>

@@ -1,5 +1,16 @@
+/**
+ * RuddyJS Run Templating
+ *
+ *  @package    ruddyJS
+ *  @author     Gil Nimer <info@ruddymonkey.com>
+ *  @author     Nick Vlug <info@ruddy.nl>
+ *  @copyright  Copyright 2015 Ruddy Monkey studios & ruddy.nl
+ *  @version    0.0.2
+ *
+ * http://ruddymonkey.com/ruddyjs/templating
+ */
+
 (function(__core, $r){
-    var cache = __core.cache.templating;
 
     /**
      * Update view cache
@@ -40,7 +51,7 @@
                 index++;
 
             if (b == '{{' + attr + '}}') {
-                v.htmlData[i] = model[index];
+                v.htmlData[i] = $str (model[index] + '').escapeHTML();
                 return;
             }
         });
@@ -65,7 +76,7 @@
 
             key = b.replace('{{' + arr[1] + '.', '').replace('}}', '');
             if (key in model[index]) {
-                v.htmlData[i] = model[index][key];
+                v.htmlData[i] = $str (model[index][key] + '').escapeHTML();
             }
         });
         v.el.html(v.htmlData.join('')).append();
@@ -84,7 +95,7 @@
             key = b.replace('{{', '').replace('}}', '');
             model = c.models[key];
             if (model && !__core.isArr(model.value))
-                v.htmlData[i] = model.func(model);
+                v.htmlData[i] = $str (model.callback(model) + '').escapeHTML();
         });
         v.el.html(v.htmlData.join('')).inner();
     }
@@ -101,11 +112,14 @@
 
         m.el.on(m.event, $func(function (e, t) {
             if (m.el.el == t) {
+                m.value = $str (m.callback(t) + '').escapeHTML();
+
                 $arr (c.views).forEach(function (v) {
                     var html;
                     v.htmlBraces.forEach(function (b, i) {
-                        if (b == '{{' + k + '}}')
-                            v.htmlData[i] = m.func(t);
+                        if (b == '{{' + k + '}}') {
+                            v.htmlData[i] = m.value;
+                        }
                     });
                     html = v.htmlData.join('');
                     v.el.html(html).inner();
@@ -118,11 +132,13 @@
      * Run Templating
      */
     function templating () {
-        cache.forEach(function (v) {
+        var cached  = $obj (__core.cache.templating.apps);
+
+        cached.forEach(function (v) {
             $obj (v.controllers).forEach(function (c) {
                 $arr (c.views).forEach(function (v) {
                     var repeat  = $str (v.el.attribute('app-repeat') || ' '),
-                        array   = (repeat+'-> ').split('->');
+                        array   = (repeat + '-> ').split('->');
 
                     if(repeat != ' ' && array[0] in c.models) {
                         v.el.html('').inner();

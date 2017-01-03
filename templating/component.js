@@ -1,5 +1,5 @@
 /**
- * RuddyJS Templating - App
+ * RuddyJS Templating - component
  *
  *  @package    ruddyJS
  *  @author     Gil Nimer <info@ruddymonkey.com>
@@ -12,15 +12,16 @@
 
 (function(__core, $r){
     /**
-     * Application Class
+     * Component Class
      *
-     * @param appName
+     * @param componentName
      */
-    var app = $obj (function(appName) {
-        this.app    = __core.cache.templating['apps'][appName];
-        this.ctrl   = [];
-        this.models = [];
-        this.index  = 0;
+    var component = $obj (function(componentName, template) {
+        this.name       = $str (componentName);
+        this.template   = template;
+        this.index      = 0;
+
+        this.component = __core.cache.templating['components'][this.name] = {name: this.name, template: this.template, ctrls: {}};
     });
 
     /**
@@ -29,8 +30,15 @@
      * @param controllerName
      * @param callback
      */
-    app.assign('controller', $func (function(controllerName, callback){
-        var ctrl = this.ctrl[this.index] = this.app.controllers[controllerName];
+    component.assign('controller', $func(function(controllerName, callback){
+        __core.cache.templating['components'][this.name]['ctrls'][controllerName] = {callback: callback};
+        this.index++;
+    }));
+
+    /*
+    component.assign('controller', $func (function(controllerName, callback){
+
+        var ctrl = this.ctrl[this.index] = this.component.controllers[controllerName];
 
         this.models[this.index] = {};
         this.ctrl[this.index]['model'] = function(modelName, value) {
@@ -47,7 +55,7 @@
 
         callback.call(this.ctrl[this.index], this.models[this.index], this.ctrl[this.index].views);
         this.index++;
-    }));
+    }));*/
 
-    __core.app = app;
+    __core.component = component;
 })(Ruddy, $r);
